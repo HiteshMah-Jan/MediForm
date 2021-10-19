@@ -1,6 +1,21 @@
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+Hand <= product.ReorderLevel)
+            {
+                string subject = string.Format("{0} at or below reorder levels", product.ProductName);
+
+                foreach (var subscriber in product.ProductSubscribers)
+                {
+                    List<string> mailTos = new List<string>();
+
+                    string message = string.Format("<html><body>Dear {0} {1}.<br></br><p>The product '{2}' is at or below the reorder level:<br></br>The reorder level is {3} but you currently only have {4} on hand.<br></br>For info, the number of units on order is {5}.</p></body></html>", subscriber.Employee.FirstName, subscriber.Employee.LastName, product.ProductName, product.ReorderLevel, unitsOnHand, unitsOnOrder);
+
+                    mailTos.Add(subscriber.Employee.Email);
+
+                    SendEmail(mailTos, subject, message);
+                }
+
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
