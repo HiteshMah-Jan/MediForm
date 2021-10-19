@@ -1,222 +1,364 @@
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-Hand <= product.ReorderLevel)
-            {
-                string subject = string.Format("{0} at or below reorder levels", product.ProductName);
+/*
+ * Copyright (C) 2020 HERE Europe B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * License-Filename: LICENSE
+ */
 
-                foreach (var subscriber in product.ProductSubscribers)
-                {
-                    List<string> mailTos = new List<string>();
+#pragma once
 
-                    string message = string.Format("<html><body>Dear {0} {1}.<br></br><p>The product '{2}' is at or below the reorder level:<br></br>The reorder level is {3} but you currently only have {4} on hand.<br></br>For info, the number of units on order is {5}.</p></body></html>", subscriber.Employee.FirstName, subscriber.Employee.LastName, product.ProductName, product.ReorderLevel, unitsOnHand, unitsOnOrder);
+#include "AuthenticationApi.h"
 
-                    mailTos.Add(subscriber.Employee.Email);
+namespace olp {
+namespace authentication {
+namespace model {
+/**
+ * @brief An account information.
+ */
+class AUTHENTICATION_API UserAccountInfoResponse {
+ public:
+  /**
+   * @brief Gets the HERE Account ID of the user.
+   *
+   * @return The HERE Account ID of the user.
+   */
+  const std::string& GetUserId() const { return user_id_; }
 
-                    SendEmail(mailTos, subject, message);
-                }
+  /**
+   * @brief Sets the HERE Account ID of the user.
+   *
+   * @param user_id The HERE Account ID of the user.
+   */
+  void SetUserId(std::string user_id) { user_id_ = std::move(user_id); }
 
-import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.TextField;
-import javafx.stage.Stage;
+  /**
+   * @brief Gets the realm in which the user account exists.
+   *
+   * @return The user realm.
+   */
+  const std::string& GetRealm() const { return realm_; }
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
+  /**
+   * @brief Sets the realm in which the user account exists.
+   *
+   * @param realm The user realm.
+   */
+  void SetRealm(std::string realm) { realm_ = std::move(realm); }
 
-public class nurseMedicalFormController implements Initializable{
-    @FXML
-    private TextField firstName1;
+  /**
+   * @brief Gets the Facebook ID of the user.
+   *
+   * @note Not empty only if the account was created as a result of signing up
+   * with a Facebook token.
+   *
+   * @return The Facebook ID of the user.
+   */
+  const std::string& GetFacebookId() const { return facebook_id_; }
 
-    @FXML
-    private TextField lastName1;
+  /**
+   * @brief Sets the Facebook ID of the user.
+   *
+   * @param facebook_id The Facebook ID of the user.
+   */
+  void SetFacebookId(std::string facebook_id) {
+    facebook_id_ = std::move(facebook_id);
+  }
 
-    @FXML
-    private TextField height1;
+  /**
+   * @brief Gets the first name of the user.
+   *
+   * @return The first name of the user.
+   */
+  const std::string& GetFirstname() const { return firstname_; }
 
-    @FXML
-    private TextField temp1;
+  /**
+   * @brief Sets the first name of the user.
+   *
+   * @param firstname The first name of the user.
+   */
+  void SetFirstname(std::string firstname) {
+    firstname_ = std::move(firstname);
+  }
 
-    @FXML
-    private TextField weight1;
+  /**
+   * @brief Gets the last name of the user.
+   *
+   * @return The last name of the user.
+   */
+  const std::string& GetLastname() const { return lastname_; }
 
-    @FXML
-    private TextField bloodPress1;
+  /**
+   * @brief Sets the last name of the user.
+   *
+   * @param lastname The last name of the user.
+   */
+  void SetLastname(std::string lastname) { lastname_ = std::move(lastname); }
 
-    @FXML
-    private TextField pulseRate1;
+  /**
+   * @brief Gets the primary email address.
+   *
+   * @return The primary email address.
+   */
+  const std::string& GetEmail() const { return email_; }
 
-    @FXML
-    private TextField assignedPhysician1;
+  /**
+   * @brief Sets the primary email address.
+   *
+   * @param email The primary email address.
+   */
+  void SetEmail(std::string email) { email_ = std::move(email); }
 
-    @FXML
-    private TextField symptoms1;
+  /**
+   * @brief Gets the recovery email address.
+   *
+   * @return The recovery email address.
+   */
+  const std::string& GetRecoveryEmail() const { return recovery_email_; }
 
-    @FXML
-    private TextField medications1;
+  /**
+   * @brief Sets the recovery email address.
+   *
+   * @param recovery_email The recovery email address.
+   */
+  void SetRecoveryEmail(std::string recovery_email) {
+    recovery_email_ = std::move(recovery_email);
+  }
 
-    @FXML
-    private TextField tests1;
+  /**
+   * @brief Gets the day of birth in the day/month/year format.
+   *
+   * @return The day of birth.
+   */
+  const std::string& GetDob() const { return dob_; }
 
-    @FXML
-    private TextField diagnosis1;
+  /**
+   * @brief Sets the day of birth.
+   *
+   * @param dob The day of birth.
+   */
+  void SetDob(std::string dob) { dob_ = std::move(dob); }
 
-    @FXML
-    void submitVitals(ActionEvent event) throws IOException {
-        Main.patient.setHeight(Float.parseFloat(height1.getText()));
-        Main.patient.setWeight(Float.parseFloat(weight1.getText()));
-        Main.patient.setTemperature(Float.parseFloat(height1.getText()));
-        Main.patient.setBloodPressure(bloodPress1.getText());
-        Main.patient.setPulseRate(pulseRate1.getText());
-        Main.patient.setAssignedPhysician(assignedPhysician1.getText());
+  /**
+   * @brief Gets the code of the user's country in the ISO 3166-1 alpha-3
+   * format.
+   *
+   * @return The country code.
+   */
+  const std::string& GetCountryCode() const { return country_code_; }
 
-        DatabaseInterface.updatePatient(Main.patient);
+  /**
+   * @brief Sets the code of the user's country in the ISO 3166-1 alpha-3
+   * format.
+   *
+   * @param country_code The country code.
+   */
+  void SetCountryCode(std::string country_code) {
+    country_code_ = std::move(country_code);
+  }
 
-        Parent nurseMenuParent = FXMLLoader.load(getClass().getResource("nurseMenu.fxml"));
-        Scene nurseMenuScene = new Scene(nurseMenuParent);
-        
-        Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
-        window.setScene(nurseMenuScene);
-        window.show();
-    }
+  /**
+   * @brief Gets the code of the user's language in the ISO 639-1 2 format.
+   *
+   * @return The language code.
+   */
+  const std::string& GetLanguage() const { return language_; }
 
-    @FXML
-    void toNurseMenu(ActionEvent event) throws IOException {
-        Parent nurseMenuParent = FXMLLoader.load(getClass().getResource("nurseMenu.fxml"));
-        Scene nurseMenuScene = new Scene(nurseMenuParent);
-        
-        Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
-        window.setScene(nurseMenuScene);
-        window.show();
-    }
+  /**
+   * @brief Sets the code of the user's language in the ISO 639-1 2 format.
+   *
+   * @param language The language code.
+   */
+  void SetLanguage(std::string language) { language_ = std::move(language); }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        String name = Main.patient.getName();
-        String[] nameSplit = name.split(" ");
-        firstName1.setText(nameSplit[0]);
-        lastName1.setText(nameSplit[1]);
+  /**
+   * @brief Gets the verification of the primary email address.
+   *
+   * @note The user is asked to verify their email on signup, but doing so is
+   * optional.
+   *
+   * @return True if the primary email address was verified; false otherwise.
+   */
+  bool GetEmailVerified() const { return email_verified_; }
 
-        Float f = (Float) Main.patient.getHeight();
-        if(f == 0) height1.setText("");
-        else height1.setText(f.toString());
+  /**
+   * @brief Sets the verification of the primary email address.
+   *
+   * @param email_verified True if the primary email address was verified; false
+   * otherwise.
+   */
+  void SetEmailVerified(bool email_verified) {
+    email_verified_ = email_verified;
+  }
 
-        f = (Float) Main.patient.getWeight();
-        if(f == 0) weight1.setText("");
-        else weight1.setText(f.toString());
+  /**
+   * @brief Gets the user's phone number.
+   *
+   * @return The phone number.
+   */
+  const std::string& GetPhoneNumber() const { return phone_number_; }
 
-        f = (Float) Main.patient.getTemperature();
-        if(f == 0) temp1.setText("");
-        else temp1.setText(f.toString());
+  /**
+   * @brief Sets the user's phone number.
+   *
+   * @param phone_number The phone number.
+   */
+  void SetPhoneNumber(std::string phone_number) {
+    phone_number_ = phone_number;
+  }
 
-        String s = Main.patient.getBloodPressure();
-        if(s == null) bloodPress1.setText("");
-        else bloodPress1.setText(s);
+  /**
+   * @brief Gets the verification of the phone number.
+   *
+   * @return True if the phone number was verified; false otherwise.
+   */
+  bool GetPhoneNumberVerified() const { return phone_number_verified_; }
 
-        s = Main.patient.getPulseRate();
-        if(s == null) pulseRate1.setText("");
-        else pulseRate1.setText(s);
+  /**
+   * @brief Sets the verification of the phone number.
+   *
+   * @param phone_number_verified True if the phone number was verified; false
+   * otherwise.
+   */
+  void SetPhoneNumberVerified(bool phone_number_verified) {
+    phone_number_verified_ = phone_number_verified;
+  }
 
-        s = Main.patient.getAssignedPhysician();
-        if(s == null) assignedPhysician1.setText("");
-        else assignedPhysician1.setText(s);
+  /**
+   * @brief Checks if the marketing is enabled.
+   *
+   * @return True if the marketing is enabled; false otherwise.
+   */
+  bool GetMarketingEnabled() const { return marketing_enabled_; }
 
-        symptoms1.setText(Main.patient.getSymptoms());
+  /**
+   * @brief Sets the marketing if it is enabled.
+   *
+   * @param marketing_enabled True if the marketing is enabled; false otherwise.
+   */
+  void SetMarketingEnabled(bool marketing_enabled) {
+    marketing_enabled_ = marketing_enabled;
+  }
 
-        StringBuilder sb = new StringBuilder();
+  /**
+   * @brief Gets the timestamp (milliseconds since the Unix epoch) of when
+   * the account was created.
+   *
+   * @return The epoch time when the account was created.
+   */
+  time_t GetCreatedTime() const { return created_time_; }
 
-        if(Main.patient.getPain() != 0) {
-            sb.append("Pain: ");
-            sb.append(Main.patient.getPain());
-            sb.append("; ");
-        }
-        if(Main.patient.getAnticoagulant() != 0) {
-            sb.append("Anticoagulant: ");
-            sb.append(Main.patient.getAnticoagulant());
-            sb.append("; ");
-        }
-        if(Main.patient.getBetaBlocker() != 0) {
-            sb.append("Beta Blocker: ");
-            sb.append(Main.patient.getBetaBlocker());
-            sb.append("; ");
-        }
-        if(Main.patient.getAntiretroviral() != 0) {
-            sb.append("Antiretroviral: ");
-            sb.append(Main.patient.getAntiretroviral());
-            sb.append("; ");
-        }
-        if(Main.patient.getInsulin() != 0) {
-            sb.append("Insulin: ");
-            sb.append(Main.patient.getInsulin());
-            sb.append("; ");
-        }
-        if(Main.patient.getAntiInflammatory() != 0) {
-            sb.append("Anti Inflammatory: ");
-            sb.append(Main.patient.getAntiInflammatory());
-            sb.append("; ");
-        }
-        if(Main.patient.getUrsodiol() != 0) {
-            sb.append("Ursodiol: ");
-            sb.append(Main.patient.getUrsodiol());
-            sb.append("; ");
-        }
-        if(Main.patient.getCalciumReducer() != 0) {
-            sb.append("Calcium Reducer: ");
-            sb.append(Main.patient.getCalciumReducer());
-            sb.append("; ");
-        }
+  /**
+   * @brief Sets the timestamp (milliseconds since the Unix epoch) of when
+   * the account was created.
+   *
+   * @param time The epoch time when the account was created.
+   */
+  void SetCreatedTime(time_t created_time) { created_time_ = created_time; }
 
-        medications1.setText(sb.toString());
-        sb.setLength(0);
+  /**
+   * @brief Gets the timestamp (milliseconds since the Unix epoch) of when the
+   * account was last updated.
+   *
+   * @note The time is updated when the following
+   * user properties are changed: `email`, `recoveryEmail`, `dob`,
+   * `countryCode`, `firstname`, `lastname`, `language`, `phoneNumber`.
+   *
+   * @return The epoch time when the account was updated.
+   */
+  time_t GetUpdatedTime() const { return updated_time_; }
 
-        if(Main.patient.getNucleicAcid())
-            sb.append("Calcium Reducer; ");
-        if(Main.patient.getCoagulationPanel())
-            sb.append("Coagulation Panel; ");
-        if(Main.patient.getDheaSulfateSerum())
-            sb.append("Dhea Sulfate Serum; ");
-        if(Main.patient.getcReactiveProtein())
-            sb.append("C Reactive Protein; ");
-        if(Main.patient.getAlc())
-            sb.append("ALC; ");
-        if(Main.patient.getXray())
-            sb.append("XRay; ");
-        if(Main.patient.getMri())
-            sb.append("MRI; ");
-        if(Main.patient.getCtScan())
-            sb.append("CT Scan; ");
-        if(Main.patient.getUrinalysis())
-            sb.append("Urinalysis; ");
-        if(Main.patient.getStoolCultures())
-            sb.append("Stool Cultures; ");
+  /**
+   * @brief Sets the timestamp (milliseconds since the Unix epoch) of when the
+   * account was last updated.
+   *
+   * @return The epoch time when the account was updated.
+   */
+  void SetUpdatedTime(time_t updated_time) { updated_time_ = updated_time; }
 
-        tests1.setText(sb.toString());
-        sb.setLength(0);
+  /**
+   * @brief Gets the current state of the account.
+   *
+   * @note The list of the possible states of the account:
+   * 'deleted' - The account was permanently deleted.
+   * 'disabled' - The account was disabled by an administrator.
+   * 'locked' - The account was automatically locked due to suspicious activity
+   * and will be unlocked after some time.
+   * 'enabled' - The account is enabled, and the user can log in.
+   *
+   * @return The current state of the account.
+   */
+  const std::string& GetState() const { return state_; }
 
-        if(Main.patient.getBrokenBone())
-            sb.append("Broken bone; ");
-        if(Main.patient.getHeartAttack())
-            sb.append("Heart attack; ");
-        if(Main.patient.getLaceration())
-            sb.append("Laceration; ");
-        if(Main.patient.getHivAIDS())
-            sb.append("HIV/AIDS; ");
-        if(Main.patient.getLiverFailure())
-            sb.append("Liver failure; ");
-        if(Main.patient.getKidneyFailure())
-            sb.append("Kidney Failure; ");
-        if(Main.patient.getDiabetes())
-            sb.append("Diabetes; ");
-        if(Main.patient.getInfammatoryBowlDisease())
-            sb.append("Inflammatory bowl disease; ");
-        if(Main.patient.getStroke())
-            sb.append("Stroke; ");
-        if(Main.patient.getTornMuscleTendon())
-            sb.append("Torn muscle/Tendon; ");
+  /**
+   * @brief Sets the current state of the account.
+   *
+   * @param state The current state of the account.
+   */
+  void SetState(std::string state) { state_ = std::move(state); }
 
-        diagnosis1.setText(sb.toString());
-    }
-}
+  /**
+   * @brief Gets the HRN of the user.
+   *
+   * @return The user HRN.
+   */
+  const std::string& GetHrn() const { return hrn_; }
+
+  /**
+   * @brief Sets the HRN of the user.
+   *
+   * @param hrn The user HRN.
+   */
+  void SetHrn(std::string hrn) { hrn_ = std::move(hrn); }
+
+  /**
+   * @brief Gets the account type.
+   *
+   * @return The account type.
+   */
+  const std::string& GetAccountType() const { return account_type_; }
+
+  /**
+   * @brief Sets the account type.
+   *
+   * @param account_type The account type.
+   */
+  void SetAccountType(std::string account_type) {
+    account_type_ = std::move(account_type);
+  }
+
+ private:
+  std::string user_id_;
+  std::string realm_;
+  std::string facebook_id_;
+  std::string firstname_;
+  std::string lastname_;
+  std::string email_;
+  std::string recovery_email_;
+  std::string dob_;
+  std::string country_code_;
+  std::string language_;
+  bool email_verified_;
+  std::string phone_number_;
+  bool phone_number_verified_;
+  bool marketing_enabled_;
+  time_t created_time_;
+  time_t updated_time_;
+  std::string state_;
+  std::string hrn_;
+  std::string account_type_;
+};
+}  // namespace model
+}  // namespace authentication
+}  // namespace olp
